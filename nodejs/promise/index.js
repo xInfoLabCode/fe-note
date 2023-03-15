@@ -1,4 +1,4 @@
-// const Promise = require('./Promise')
+// const Promise = require('./Promise') ///// ! 注释此处即可获取正确运行答案
 
 const RESOLVE = '_resolve_'
 const REJECT = '_reject_'
