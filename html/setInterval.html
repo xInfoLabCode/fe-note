@@ -1,0 +1,26 @@
+<html>
+  <body>
+    <button onclick="log()">click</button>
+    <script>
+      let index = 0
+
+      const timeInterval = 2 * 1000
+      const callbackFn = () => {
+        console.log(index, new Date())
+      }
+
+      let timeout = setTimeout(function fn() {
+        callbackFn()
+        timeout = setTimeout(fn, timeInterval)
+
+        if (index > 10) {
+          clearTimeout(timeout)
+          timeout = null
+          console.log('Last Index', index)
+        } else {
+          index++
+        }
+      }, timeInterval)
+    </script>
+  </body>
+</html>

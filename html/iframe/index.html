@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <style>
+      .main {
+        background-color: rebeccapurple;
+      }
+    </style>
+  </head>
+  <body class="main">
+    <iframe src="./iframe.html"></iframe>
+    <script>
+      const parent = window.top
+      console.log(100, parent.document.body.classList)
+    </script>
+  </body>
+</html>

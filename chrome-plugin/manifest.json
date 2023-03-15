@@ -1,0 +1,23 @@
+{
+  "name": "zh-chrome-plugin",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "description": "this is a demo plugin from zh",
+  "action": {
+    "default_popup": "template/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/util.js", "js/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "tabs",
+    "tts",
+    "notifications"
+  ]
+}

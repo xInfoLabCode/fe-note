@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 500px;
+        background-color: #fff;
+      }
+      .rainbow {
+        position: relative;
+        width: var(--w);
+        height: var(--h);
+        border: 1px solid #0092ff;
+      }
+      .rainbow-circle {
+        position: absolute;
+        --width: calc(var(--w) - var(--i) * var(--gap) * 5);
+        --height: calc(var(--h) - var(--i) * var(--gap) * 2);
+        width: var(--width);
+        height: var(--height);
+        left: calc(50% - var(--width) / 2);
+        top: calc(var(--h) - var(--height));
+        border: calc(var(--gap) * 2) solid var(--c);
+        border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        border-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rainbow" style="--w: 300px; --h: 125px; --gap: 5px;">
+      <div class="rainbow-circle" style="--i: 0; --c: #666"></div>
+      <div class="rainbow-circle" style="--i: 1; --c: #777"></div>
+      <div class="rainbow-circle" style="--i: 2; --c: #888"></div>
+      <div class="rainbow-circle" style="--i: 3; --c: #999"></div>
+      <div class="rainbow-circle" style="--i: 4; --c: #aaa"></div>
+      <div class="rainbow-circle" style="--i: 5; --c: #bbb"></div>
+      <div class="rainbow-circle" style="--i: 6; --c: #ccc"></div>
+    </div>
+  </body>
+</html>

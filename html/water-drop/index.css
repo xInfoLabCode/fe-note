@@ -1,0 +1,56 @@
+.container {
+  font-family: monospace;
+  font-size: 16px;
+  display: flex;
+  cursor: pointer;
+  color: #999;
+}
+.container .water-drop {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  box-shadow: inset 10px 10px 10px rgba(0, 0, 0, .02),
+    10px 10px 10px rgba(0, 0, 0, .02),
+    10px 10px 10px rgba(0, 0, 0, .02),
+    inset 10px 10px 10px rgba(0, 0, 0, .02);
+  align-items: center;
+  transition: border-radius ease-in-out .5s;
+}
+.container .water-drop p {
+  padding-top: 40px;
+  height: 40px;
+}
+.container .water-drop::before {
+  content: '';
+  position: absolute;
+  left: calc(50% - 40px);
+  top: 80px;
+  width: 80px;
+  height: 80px;
+  display: block;
+  box-shadow: inset 10px 10px 10px rgba(0, 0, 0, .1), 
+    inset 10px 10px 10px rgba(0, 0, 0, .1), 
+    10px 10px 10px rgba(0, 0, 0, .1), 
+    10px 10px 10px rgba(0, 0, 0, .1);
+  border-radius: 50%;
+  border-color: #fff;
+}
+.container .water-drop:nth-child(1) {
+  border-radius: 40% 50% 40% 30% / 30% 40% 30% 50%;
+}
+.container .water-drop:nth-child(2) {
+  border-radius: 30% 40% 40% 30% / 50% 30% 40% 30%;
+}
+.container .water-drop:nth-child(3) {
+  border-radius: 50% 30% 40% 30% / 30% 40% 30% 50%;
+}
+.container .water-drop:hover {
+  border-radius: 50%;
+}

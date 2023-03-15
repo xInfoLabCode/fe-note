@@ -1,0 +1,13 @@
+<html>
+  <script>
+    window.addEventListener("unhandledrejection", function (e) {
+      console.log("捕获到的promise异常:", e);
+      // e.preventDefault();
+    });
+
+    new Promise((res) => {
+      console.log(a);
+    });
+    // 捕获到的promise异常的: PromiseRejectionEvent
+  </script>
+</html>

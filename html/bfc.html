@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <style>
+      .div1 {
+        float: left;
+        width: 300px;
+        background-color: pink;
+        height: calc(100vh - 100px);
+      }
+
+      .div2 {
+        background-color: black;
+        height: 100vh;
+        overflow: hidden; /* 双栏布局，左侧flaot+右侧BFC 自适应布局。左侧float和右侧overflow：hidden形成了2个BFC */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="div1"></div>
+    <div class="div2"></div>
+  </body>
+</html>
