@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <div id="app">{{message}}</div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import { createApp } from 'vue'
+
+      createApp({
+        data() {
+          return {
+            message: 'test'
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>
