@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         adShield
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  block ad by yourself
 // @author       Brandom
 // @match        *://*/*
@@ -10,9 +10,10 @@
 // ==/UserScript==
 
 (function () {
-	const MAX_AD_SCAN = 5 // 广告最多扫描次数，最小值为1
-	const SCAN_SPAN = 100 // 广告扫描间隔增幅
-	const WHITE_LIST = ['csdn.net']
+	const WHITE_LIST = ['csdn.net'] // 广告屏蔽白名单，统一小写
+
+	const MAX_AD_SCAN = 5 // 广告最多扫描次数，最小值为1。如果广告有延后加载，可以适当将数值调大
+	const SCAN_SPAN = 100 // 广告扫描间隔增幅，一般不建议修改
 
 	function checkWhiteList() {
 		const host = window.location.host.toLowerCase()
