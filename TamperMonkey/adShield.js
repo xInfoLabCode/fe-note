@@ -14,27 +14,6 @@
 	const SCAN_SPAN = 100 // 广告扫描间隔增幅
 	const WHITE_LIST = ['csdn.net']
 
-	function log(msg, type = 'log') {
-		type = ['log', 'warn', 'error', 'info'].includes(type) ? type : 'log'
-
-		console[type](`[TamperMonkey] ${msg}`)
-	}
-
-	// 直接将dom移除
-	function removeDom(selector) {
-		document.querySelectorAll(selector).forEach(node => {
-			node.parentNode.removeChild(node)
-		})
-	}
-
-	// 通过css隐藏的方式屏蔽dom
-	function hideDom(selector) {
-		const style = document.createElement('style')
-		style.innerText = `${selector} { display: none !important }`
-
-		document.querySelector('head').appendChild(style)
-	}
-
 	function checkWhiteList() {
 		const host = window.location.host.toLowerCase()
 
@@ -43,13 +22,61 @@
 		}, false)
 	}
 
+	function log(msg, type = 'log') {
+		type = ['log', 'warn', 'error', 'info'].includes(type) ? type : 'log'
+
+		console[type](`[TamperMonkey] ${msg}`)
+	}
+
+	// 直接将dom移除
+	function remove(target) {
+		if (typeof target === 'string') {
+			document.querySelectorAll(target).forEach(node => {
+				remove(node)
+			})
+		} else {
+			target?.parentNode?.removeChild(target)
+		}
+	}
+
+	// 通过css隐藏的方式屏蔽dom
+	function hide(target) {
+		if (typeof target === 'string') {
+			const style = document.createElement('style')
+			style.innerText = `${target} { display: none !important }`
+
+			document.querySelector('head').appendChild(style)
+		} else {
+			target?.style?.setProperty('display', 'none !important')
+		}
+	}
+
 
 	const blockMap = {}
 
 	// iframe广告
 	blockMap.iframe = function () {
-		removeDom('iframe')
-		hideDom('iframe')
+		remove('iframe')
+		hide('iframe')
+	}
+
+	// google广告
+	blockMap.google = function() {
+		let body = document.body
+		let html = body.parentNode
+
+		document.querySelectorAll('ins.adsbygoogle').forEach(node => {
+			let parent = node.parentNode
+			if (![body, html].includes(parent)) {
+				remove(parent)
+			} else {
+				remove(node)
+			}
+			parent = null
+		})
+
+		body = null
+		html = null
 	}
 
 	// 简书
@@ -61,16 +88,16 @@
 
 		// 简书详情页
 		if (pathname.startsWith('/p/')) {
-			removeDom('aside') // 右侧热门故事
-			removeDom('ul') // 下方推荐
+			remove('aside') // 右侧热门故事
+			remove('ul') // 下方推荐
 		}
 	}
 
 	// 百度
 	blockMap.baidu = function () {
 		// 屏蔽右侧的热门推荐及推广
-		removeDom('#content_right')
-		hideDom('#content_right')
+		remove('#content_right')
+		hide('#content_right')
 	}
 
 	// 屏蔽执行
