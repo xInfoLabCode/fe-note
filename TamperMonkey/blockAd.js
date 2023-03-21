@@ -10,7 +10,8 @@
 // ==/UserScript==
 
 (function () {
-	const MAX_AD_SCAN = 5
+	const MAX_AD_SCAN = 5 // 广告最多扫描次数，最小值为1
+	const SCAN_SPAN = 100 // 广告扫描间隔增幅
 	const WHITE_LIST = ['csdn.net']
 
 	function log(msg, type = 'log') {
@@ -72,26 +73,24 @@
 	function doBlock() {
 		log('start')
 
-		let index = 0
-		const interval = setInterval(() => {
-			try {
-				index++
+		function interval(index) {
+			setTimeout(() => {
+				try {
+					if (index >= MAX_AD_SCAN) {
+						log(`Ad scan finished. Scaned ${MAX_AD_SCAN} times totally`)
+					} else {
+						log(`Ad scan No.${index + 1}`)
 
-				if (index > MAX_AD_SCAN) {
-					log(`Ad scan finished. Scaned ${MAX_AD_SCAN} times totally`)
-
-					clearInterval(interval)
-				} else {
-					log(`Ad scan No.${index}`)
-
-					Object.entries(blockMap).forEach(([, fn]) => fn())
+						Object.entries(blockMap).forEach(([, fn]) => fn())
+						interval(++index)
+					}
+				} catch (err) {
+					log(`Ad scan error`, err)
 				}
-			} catch (err) {
-				log(err, 'error')
+			}, index * SCAN_SPAN)
+		}
 
-				clearInterval(interval)
-			}
-		}, 500)
+		interval(0)
 
 		log('finished')
 	}
