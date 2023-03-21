@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         ad_shield
+// @name         adShield
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  block ad
+// @version      1.0
+// @description  block ad by yourself
 // @author       Brandom
 // @match        *://*/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -54,12 +54,16 @@
 
 	// 简书
 	blockMap.jianshu = function () {
-		if (!window.location.host.includes('jianshu.com')) {
+		const { host, pathname } = window.location
+		if (!host.includes('jianshu.com')) {
 			return
 		}
 
-		removeDom('aside') // 右侧热门故事
-		removeDom('ul') // 下方推荐
+		// 简书详情页
+		if (pathname.startsWith('/p/')) {
+			removeDom('aside') // 右侧热门故事
+			removeDom('ul') // 下方推荐
+		}
 	}
 
 	// 百度
