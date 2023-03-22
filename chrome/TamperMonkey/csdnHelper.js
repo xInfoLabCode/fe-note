@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         csdnHelper
-// @version      0.4
+// @version      0.4.1
 // @description  customize csdn
 // @author       You
 // @match        *://blog.csdn.net/*
+// @match        *://*.blog.csdn.net/*
 // @grant        none
 // @run-at       document-body
 // ==/UserScript==
