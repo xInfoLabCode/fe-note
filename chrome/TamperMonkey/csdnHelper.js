@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         csdnHelper
-// @version      0.3
+// @version      0.4
 // @description  customize csdn
 // @author       You
 // @match        *://blog.csdn.net/*
@@ -11,25 +11,52 @@
 (function() {
 	// 直接将dom移除
 	function remove(target) {
-		if (typeof target === 'string') {
-			document.querySelectorAll(target).forEach(node => {
-				remove(node)
-			})
-		} else {
-			target?.parentNode?.removeChild(target)
-		}
+		const targets = Array.isArray(target) ? target : [target]
+
+		targets.forEach(item => {
+			if (typeof item === 'string') {
+				document.querySelectorAll(item).forEach(node => {
+					remove(node)
+				})
+			} else {
+				target?.parentNode?.removeChild(item)
+			}
+		})
 	}
 
 	// 通过css隐藏的方式屏蔽dom
 	function hide(target) {
-		if (typeof target === 'string') {
-			const style = document.createElement('style')
-			style.innerText = `${target} { display: none !important }`
+		const targets = Array.isArray(target) ? target : [target]
 
-			document.querySelector('head').appendChild(style)
-		} else {
-			target?.style?.setProperty('display', 'none !important')
-		}
+		targets.forEach(item => {
+			if (typeof item === 'string') {
+				addStyle(`${item} { display: none !important }`)
+			} else {
+				item?.style?.setProperty('display', 'none !important')
+			}
+		})
+	}
+
+	// 插入css
+	function addStyle(styleStr) {
+		let style = document.createElement('style')
+		style.innerText = styleStr
+
+		document.querySelector('head').appendChild(style)
+
+		style = null
+	}
+
+	// 写cookie
+	function addCookie(key, value, { domain, path, expires } = {}) {
+		const cookie = `
+			${key}=${value};
+			${domain ? `domain=${domain};` : ''}
+			${path ? `path=${path};` : ''}
+			${expires ? `domain=${expires};` : ''}
+		`
+
+		document.cookie = cookie
 	}
 
 
@@ -39,11 +66,10 @@
 	// 博客默认全屏浏览
 	actions.setBlogFullScreen = function() {
 		// 通过cookie强制开启全屏
-    document.cookie = 'blog_details_concision=0;domain=csdn.net;path=/;expires=365'
+		addCookie('blog_details_concision', '0', { domain: 'csdn.net', path: '/', expires: 365 })
 
 		// cookie不生效时，强制清理左右内容
-		remove('aside')
-		remove('.rightAside')
+		remove(['aside', '.rightAside'])
 	}
 
 	// 博客移除推荐
@@ -58,13 +84,13 @@
 
 	// 博客代码未登陆可复制
 	actions.setCodeCopyable = function() {
-		let style = document.createElement('style')
-		style.innerText = `#content_views pre, #content_views pre code { user-select: auto !important }`
-
-		document.querySelector('head').appendChild(style)
-		style = null
+		addStyle(`#content_views pre, #content_views pre code { user-select: auto !important }`)
 	}
 
+	// 屏蔽toolbar、sidebar等
+	actions.hideToolbar = function() {
+		hide(['#csdn-toolbar', '#recommendNps', '.csdn-side-toolbar', '.blog-footer-bottom', '#toolBarBox'])
+	}
 
 	function doActions() {
     Object.entries(actions).forEach(([, action]) => action())
