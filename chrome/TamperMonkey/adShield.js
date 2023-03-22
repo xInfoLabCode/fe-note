@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         adShield
-// @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  block ad by yourself
 // @author       Brandom
 // @match        *://*.baidu.com/*
 // @match        *://*.jianshu.com/*
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @grant        none
+// @grant        window.onurlchange
+// @noframes
+// @run-at        document-body
 // ==/UserScript==
 
 (function () {
@@ -22,10 +22,6 @@
 		return WHITE_LIST.reduce((res, cur) => {
 			return res || host.includes(cur)
 		}, false)
-	}
-
-	function checkIframe() {
-		return window !== window.parent
 	}
 
 	function log(msg, type = 'log') {
@@ -133,38 +129,14 @@
 		log('finished')
 	}
 
-	// 事件监听
-	function initEvents(callback) {
-		// 1.重写路由事件，方便监听（如百度切换搜索词触发重新搜索的场景下）
-		const historyWrite = ['pushState', 'replaceState']
-		historyWrite.forEach(fn => {
-			const stateChange = window.history[fn]
-			window.history[fn] = function () {
-				window.dispatchEvent(new Event('statechange'))
-				stateChange.apply(this, [...arguments])
-			}
-		})
-
-		// 2.绑定事件监听
-		const eventList = [
-			'load', // 页面加载完成
-			'hashchange', // hash变化时监听
-			'popstate', // 前进、后退等操作监听
-			'statechange', // 自定义的监听，执行pushState、replaceState时触发
-		]
-		eventList.forEach(event => {
-			window.addEventListener(event, event => callback(event))
-		})
-	}
-
 	function main() {
 		if (checkWhiteList()) {
 			log('current site is in the white list', 'warn')
-		} else if (checkIframe()) {
-			log('current page is running in the iframe', 'warn')
-		} else {
-			initEvents(doBlock)
+			return
 		}
+
+		doBlock()
+		window.addEventListener('urlchange', doBlock)
 	}
 
 	main()
