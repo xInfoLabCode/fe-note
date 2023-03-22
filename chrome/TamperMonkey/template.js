@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TamperMonkeyPlugin
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.1
 // @description  Brandom's tamper monkey plugin
 // @author       Brandom
 // @match        *://*
@@ -12,32 +12,57 @@
 (function () {
   // 工具函数
   const utils = {
+    // 写cookie
+    addCookie(key, value, { domain, path, expires } = {}) {
+      const cookie = `
+        ${key}=${value};
+        ${domain ? `domain=${domain};` : ''}
+        ${path ? `path=${path};` : ''}
+        ${expires ? `domain=${expires};` : ''}
+      `
+
+      document.cookie = cookie
+    },
     // 输出日志
     log(msg, type = 'log') {
       type = ['log', 'warn', 'error', 'info'].includes(type) ? type : 'log'
 
       console[type](`[TamperMonkey] ${msg}`)
     },
+    // 插入css
+    addStyle(styleStr) {
+      let style = document.createElement('style')
+      style.innerText = styleStr
+
+      document.querySelector('head').appendChild(style)
+
+      style = null
+    },
     // 直接将dom移除
     remove(target) {
-      if (typeof target === 'string') {
-        document.querySelectorAll(target).forEach(node => {
-          utils.remove(node)
-        })
-      } else {
-        target?.parentNode?.removeChild(target)
-      }
+      const targets = Array.isArray(target) ? target : [target]
+
+      targets.forEach(item => {
+        if (typeof item === 'string') {
+          document.querySelectorAll(item).forEach(node => {
+            utils.remove(node)
+          })
+        } else {
+          target?.parentNode?.removeChild(item)
+        }
+      })
     },
     // 通过css隐藏的方式屏蔽dom
     hide(target) {
-      if (typeof target === 'string') {
-        const style = document.createElement('style')
-        style.innerText = `${target} { display: none !important }`
+      const targets = Array.isArray(target) ? target : [target]
 
-        document.querySelector('head').appendChild(style)
-      } else {
-        target?.style?.setProperty('display', 'none !important')
-      }
+      targets.forEach(item => {
+        if (typeof item === 'string') {
+          utils.addStyle(`${item} { display: none !important }`)
+        } else {
+          item?.style?.setProperty('display', 'none !important')
+        }
+      })
     }
   }
 
