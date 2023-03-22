@@ -1,19 +1,20 @@
 // ==UserScript==
 // @name         adShield
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  block ad by yourself
 // @author       Brandom
-// @match        *://*/*
+// @match        *://*.baidu.com/*
+// @match        *://*.jianshu.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
 
 (function () {
-	const WHITE_LIST = ['csdn.net'] // 广告屏蔽白名单，统一小写
+	const WHITE_LIST = [] // 广告屏蔽白名单，统一小写
 
 	const MAX_AD_SCAN = 5 // 广告最多扫描次数，最小值为1。如果广告有延后加载，可以适当将数值调大
-	const SCAN_SPAN = 100 // 广告扫描间隔增幅，一般不建议修改
+	const SCAN_SPAN = 200 // 广告扫描间隔增幅，一般不建议修改
 
 	function checkWhiteList() {
 		const host = window.location.host.toLowerCase()
@@ -43,10 +44,11 @@
 	// 通过css隐藏的方式屏蔽dom
 	function hide(target) {
 		if (typeof target === 'string') {
-			const style = document.createElement('style')
+			let style = document.createElement('style')
 			style.innerText = `${target} { display: none !important }`
 
 			document.querySelector('head').appendChild(style)
+			style = null
 		} else {
 			target?.style?.setProperty('display', 'none !important')
 		}
