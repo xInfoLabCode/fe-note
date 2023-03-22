@@ -1,12 +1,11 @@
 // ==UserScript==
-// @name         CSDN_Helper
-// @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  customize csdn for you own taste
+// @name         csdnHelper
+// @version      0.3
+// @description  customize csdn
 // @author       You
 // @match        *://blog.csdn.net/*
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
+// @run-at       document-body
 // ==/UserScript==
 
 (function() {
@@ -49,7 +48,12 @@
 
 	// 博客移除推荐
 	actions.removeBlogRecommend = function() {
-		remove('.recommend-box')
+		function clearRecommend() {
+			remove('.recommend-box')
+			window.removeEventListener('load', clearRecommend)
+		}
+
+		window.addEventListener('load', clearRecommend)
 	}
 
 	// 博客代码未登陆可复制
@@ -67,7 +71,7 @@
 	}
 
 	function main() {
-	  window.addEventListener('load', doActions)
+	  doActions()
 	}
 
   main()
