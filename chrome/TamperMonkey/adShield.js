@@ -24,6 +24,10 @@
 		}, false)
 	}
 
+	function checkIframe() {
+		return window !== window.parent
+	}
+
 	function log(msg, type = 'log') {
 		type = ['log', 'warn', 'error', 'info'].includes(type) ? type : 'log'
 
@@ -154,9 +158,10 @@
 	}
 
 	function main() {
-		const isWhiteList = checkWhiteList()
-		if (isWhiteList) {
-			log('current site is in the white list')
+		if (checkWhiteList()) {
+			log('current site is in the white list', 'warn')
+		} else if (checkIframe()) {
+			log('current page is running in the iframe', 'warn')
 		} else {
 			initEvents(doBlock)
 		}
