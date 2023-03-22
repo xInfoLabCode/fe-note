@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name         Template
+// @name         TamperMonkeyPlugin
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
-// @author       You
-// @match        <$URL$>
-// @icon         <$ICON$>
-// @grant        none
+// @description  Brandom's tamper monkey plugin
+// @author       Brandom
+// @match        *://*
+// @grant        window.onurlchange
+// @run-at       document-body
 // ==/UserScript==
 
 (function () {
