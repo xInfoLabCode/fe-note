@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         adShield
-// @version      1.3
+// @version      1.3.1
 // @description  block ad by yourself
 // @author       Brandom
 // @match        *://*.baidu.com/*
@@ -44,11 +44,10 @@
 	// 通过css隐藏的方式屏蔽dom
 	function hide(target) {
 		if (typeof target === 'string') {
-			let style = document.createElement('style')
+			const style = document.createElement('style')
 			style.innerText = `${target} { display: none !important }`
 
 			document.querySelector('head').appendChild(style)
-			style = null
 		} else {
 			target?.style?.setProperty('display', 'none !important')
 		}
@@ -65,21 +64,17 @@
 
 	// google广告
 	blockMap.google = function() {
-		let body = document.body
-		let html = body.parentNode
+		const body = document.body
+		const html = body.parentNode
 
 		document.querySelectorAll('ins.adsbygoogle').forEach(node => {
-			let parent = node.parentNode
+			const parent = node.parentNode
 			if (![body, html].includes(parent)) {
 				remove(parent)
 			} else {
 				remove(node)
 			}
-			parent = null
 		})
-
-		body = null
-		html = null
 	}
 
 	// 简书

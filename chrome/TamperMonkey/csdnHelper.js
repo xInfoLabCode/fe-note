@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         csdnHelper
-// @version      0.4.1
+// @version      0.4.2
 // @description  customize csdn
 // @author       You
 // @match        *://blog.csdn.net/*
@@ -40,12 +40,10 @@
 
 	// 插入css
 	function addStyle(styleStr) {
-		let style = document.createElement('style')
+		const style = document.createElement('style')
 		style.innerText = styleStr
 
 		document.querySelector('head').appendChild(style)
-
-		style = null
 	}
 
 	// 写cookie

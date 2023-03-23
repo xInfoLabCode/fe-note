@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TamperMonkeyPlugin
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  Brandom's tamper monkey plugin
 // @author       Brandom
 // @match        *://*
@@ -31,12 +31,10 @@
     },
     // 插入css
     addStyle(styleStr) {
-      let style = document.createElement('style')
+      const style = document.createElement('style')
       style.innerText = styleStr
 
       document.querySelector('head').appendChild(style)
-
-      style = null
     },
     // 直接将dom移除
     remove(target) {
