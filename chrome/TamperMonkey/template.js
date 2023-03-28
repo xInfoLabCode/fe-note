@@ -10,10 +10,11 @@
 // ==/UserScript==
 
 (function () {
+
   // 工具函数
   const utils = {
     // 写cookie
-    addCookie(key, value, { domain, path, expires } = {}) {
+    setCookie(key, value, { domain, path, expires } = {}) {
       const cookie = `
         ${key}=${value};
         ${domain ? `domain=${domain};` : ''}
@@ -61,20 +62,23 @@
           item?.style?.setProperty('display', 'none !important')
         }
       })
-    }
+    },
+    // css和dom双重清除
+    block(target) {
+      utils.hide(target)
+      utils.remove(target)
+    },
   }
 
 
   // 操作合集
   const actionMap = {}
-
   // 插件操作xxx
   actionMap.xxx = function () {
     // xxxx
   }
 
 
-  // 主任务执行
   function main() {
     utils.log(`plugin starts`)
 
@@ -82,6 +86,6 @@
 
     utils.log(`plugin over`)
   }
-
   main()
+
 })()

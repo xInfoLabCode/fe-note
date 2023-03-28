@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         csdnHelper
-// @version      0.4.2
+// @version      0.4.4
 // @description  customize csdn
 // @author       You
 // @match        *://blog.csdn.net/*
@@ -25,19 +25,6 @@
 		})
 	}
 
-	// 通过css隐藏的方式屏蔽dom
-	function hide(target) {
-		const targets = Array.isArray(target) ? target : [target]
-
-		targets.forEach(item => {
-			if (typeof item === 'string') {
-				addStyle(`${item} { display: none !important }`)
-			} else {
-				item?.style?.setProperty('display', 'none !important')
-			}
-		})
-	}
-
 	// 插入css
 	function addStyle(styleStr) {
 		const style = document.createElement('style')
@@ -58,6 +45,24 @@
 		document.cookie = cookie
 	}
 
+	// 通过css隐藏的方式屏蔽dom
+	function hide(target) {
+		const targets = Array.isArray(target) ? target : [target]
+
+		targets.forEach(item => {
+			if (typeof item === 'string') {
+				addStyle(`${item} { display: none !important }`)
+			} else {
+				item?.style?.setProperty('display', 'none !important')
+			}
+		})
+	}
+
+	// 强力屏蔽
+	function block(target) {
+		hide(target)
+		remove(target)
+	}
 
 
 	const actions = {}
@@ -68,7 +73,9 @@
 		addCookie('blog_details_concision', '0', { domain: 'csdn.net', path: '/', expires: 365 })
 
 		// cookie不生效时，强制清理左右内容
-		remove(['aside', '.rightAside'])
+		block(['aside', '.rightAside'])
+
+		addStyle(`#mainBox { display: flex; justify-content: center; }`)
 	}
 
 	// 博客移除推荐
@@ -91,9 +98,16 @@
 		hide(['#csdn-toolbar', '#recommendNps', '.csdn-side-toolbar', '.blog-footer-bottom', '#toolBarBox'])
 	}
 
+	// 屏蔽blog选词后自动跳出的菜单
+	actions.shadeBlogContext = function() {
+		hide(['#articleSearchTip', '.article-search-tip'])
+	}
+
 	function doActions() {
     Object.entries(actions).forEach(([, action]) => action())
 	}
+
+
 
 	function main() {
 	  doActions()
